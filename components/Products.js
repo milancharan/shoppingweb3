@@ -8,7 +8,7 @@ export default function Products() {
     const [filters, setFilters] = useState({ "ASC": false, "DESC": false, "OS": false, "FD": false })
     const [productsFiltered, setProductsFiltered] = useState([])
     const [products, setProducts] = useState([])
-    const [ search, setSearch ] = useState('')
+    const [search, setSearch] = useState('')
 
     const navigate = useNavigate()
 
@@ -26,7 +26,22 @@ export default function Products() {
     const pushFilters = e => {
         // const fName = e.target.value
         // setChecked(!checked)
-        setFilters({ ...filters, [e.target.name]: !filters[e.target.name] })
+
+
+
+        if (e.target.type === "radio") {
+            if (e.target.value === "ASC") {
+                console.log("DESC")
+                setFilters({ ...filters, DESC: false,ASC:true})
+            } else {
+                console.log("ASC")
+
+                setFilters({ ...filters, ASC: false ,DESC:true})
+            }
+        } else {
+
+            setFilters({ ...filters, [e.target.value]: !filters[e.target.value] })
+        }
         console.log(filters);
         // manageFilter(e)
     }
@@ -42,7 +57,7 @@ export default function Products() {
             temp = temp.sort((a, b) => a.price - b.price)
         } else {
             temp = temp.sort((a, b) => b.price - a.price)
-            
+
         }
         // if (filters.DESC === true) {
         //     // setProductsFiltered([...products].sort((a, b) => b.price-a.price))
@@ -66,7 +81,7 @@ export default function Products() {
         // setFilters(null)
         setProductsFiltered(products)
         setFilters({ "ASC": false, "DESC": false, "OS": false, "FD": false })
-        setSearch('')
+        // setSearch('')
         // console.log("Filters Cleared");
     }
 
@@ -77,36 +92,36 @@ export default function Products() {
 
     return (
         <div className='container'>
-                <div class="input-group w-25 d-flex justify-content-center input-group-sm mb-3">    
-                    <input type="text" class="form-control" name='search' aria-label="Small" placeholder='Search here...' aria-describedby="inputGroup-sizing-sm" onChange={e => 
-                    setSearch(e.target.value)}/>
-                </div>
+            <div class="input-group w-25 d-flex justify-content-center input-group-sm mb-3">
+                <input type="text" class="form-control" name='search' aria-label="Small" placeholder='Search here...' aria-describedby="inputGroup-sizing-sm" onChange={e =>
+                    setSearch(e.target.value)} />
+            </div>
             <div className='col-3 sidebar bg-gray'>
                 <label>Filter Products</label>
                 <form className='col-6'>
-                    <label><input type='radio' name='ASC' id='ascending' value='ascending' onChange={pushFilters} checked={filters.ASC}/> Ascending</label>
-                    <label><input type='radio' name='ASC' id='descending' value='descending' onChange={pushFilters} /> Descending</label>
-                    <label><input type='checkbox' name='OS' id='outOfStock' value='outOfStock' onChange={pushFilters} checked={filters.OS}/> Out Of Stock</label>
-                    <label><input type='checkbox' name='FD' id='fastDelivery' value='fastDelivery' onChange={pushFilters} checked={filters.FD}/> Fast Delivery</label>
+                    <label><input type='radio' name='ASC' id='ascending' value='ASC' onChange={pushFilters} checked={filters.ASC} /> Ascending</label>
+                    <label><input type='radio' name='ASC' id='descending' value='DESC' onChange={pushFilters} checked={filters.DESC} /> Descending</label>
+                    <label><input type='checkbox' name='OS' id='outOfStock' value='OS' onChange={pushFilters} checked={filters.OS} /> Out Of Stock</label>
+                    <label><input type='checkbox' name='FD' id='fastDelivery' value='FD' onChange={pushFilters} checked={filters.FD} /> Fast Delivery</label>
                 </form>
                 <ClearFilterButton manageClear={manageClear} />
             </div>
             <div className='row ml-15 d-flex justify-content-center content'>
                 {productsFiltered.filter((val) => {
-                    if(search == ''){return val}
-                    else if(val.title.toLowerCase().includes(search.toLowerCase())){
+                    if (search == '') { return val }
+                    else if (val.title.toLowerCase().includes(search.toLowerCase())) {
                         return val
                     }
                 })
-                .map((p, i) => (
-                    <div className='col-3 mb-2 p-2 m-1 border border-dark border-radius-4 text-center' onClick={() => manageClick(p.id)}>
-                        <img src={p.image} width='200' height={250} alt='...' />
-                        <h6 className='mt-4'>{p.title}</h6>
-                        <p>Price : &#36; <del><i>{p.price * 2}</i></del> {p.price}</p>
-                        <p>Rating: {p.rating.rate}&#9733; <span>{p.rating.count} ratings</span></p>
-                        <button type='button'>Add To Cart</button>
-                    </div>
-                ))}
+                    .map((p, i) => (
+                        <div className='col-3 mb-2 p-2 m-1 border border-dark border-radius-4 text-center' onClick={() => manageClick(p.id)}>
+                            <img src={p.image} width='200' height={250} alt='...' />
+                            <h6 className='mt-4'>{p.title}</h6>
+                            <p>Price : &#36; <del><i>{p.price * 2}</i></del> {p.price}</p>
+                            <p>Rating: {p.rating.rate}&#9733; <span>{p.rating.count} ratings</span></p>
+                            <button type='button'>Add To Cart</button>
+                        </div>
+                    ))}
             </div>
         </div>
     )
