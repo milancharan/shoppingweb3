@@ -9,6 +9,7 @@ export default function Products() {
     const [productsFiltered, setProductsFiltered] = useState([])
     const [products, setProducts] = useState([])
     const [search, setSearch] = useState('')
+    const [clear, setClear] = useState(false)
 
     const navigate = useNavigate()
 
@@ -21,7 +22,7 @@ export default function Products() {
             .catch(err => {
                 console.log('Error : ', err);
             })
-    }, [])
+    }, [clear])
 
     const pushFilters = e => {
         // const fName = e.target.value
@@ -81,6 +82,7 @@ export default function Products() {
         // setFilters(null)
         setProductsFiltered(products)
         setFilters({ "ASC": false, "DESC": false, "OS": false, "FD": false })
+        setClear(true)
         // setSearch('')
         // console.log("Filters Cleared");
     }
